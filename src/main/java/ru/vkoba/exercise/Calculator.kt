@@ -12,7 +12,7 @@ class Calculator {
 
 
 class ReversePolishNotationConverter() {
-    val operations = mutableListOf(
+    val specSymbols = mutableListOf(
             Operation('(', false, 0),
             Operation(')', false, 0),
             Operation('+', false, 1),
@@ -25,7 +25,7 @@ class ReversePolishNotationConverter() {
         val opsStack = Stack<Char>();
         var result = ""
         for (symbol in expr) {
-            if (!isOperation(symbol) && !isBracket(symbol)) {
+            if (!isOperation(symbol)) {
                 result += symbol
                 continue
             }
@@ -55,15 +55,14 @@ class ReversePolishNotationConverter() {
 
     private fun replaceUnneccessarySpace(result: String) = result.replace("   ", " ").replace("  ", " ").trim()
 
-    private fun priority(op: Char): Byte = operations.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation '$op'")
+    private fun priority(op: Char): Byte = specSymbols.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation '$op'")
 
 
     fun addOperation(op: Operation) {
-        operations.add(op)
+        specSymbols.add(op)
     }
 
-    private fun isBracket(symbol: Char): Boolean = "()".contains(symbol)
-    private fun isOperation(symbol: Char): Boolean = operations.filter { it -> it.symbol == symbol }.isNotEmpty()
+    private fun isOperation(symbol: Char): Boolean = specSymbols.filter { it -> it.symbol == symbol }.isNotEmpty()
 }
 
 data class Operation(val symbol: Char, val isUnary: Boolean, val priopity: Byte)
