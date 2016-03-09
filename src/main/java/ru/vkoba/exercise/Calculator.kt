@@ -13,6 +13,8 @@ class Calculator {
 
 class ReversePolishNotationConverter() {
     val operations = mutableListOf(
+            Operation('(', false, 0),
+            Operation(')', false, 0),
             Operation('+', false, 1),
             Operation('-', false, 1),
             Operation('*', false, 2),
@@ -33,7 +35,7 @@ class ReversePolishNotationConverter() {
             }
             if (symbol == ')') {
                 while (opsStack.peek() != '(') {
-                    result += " " + opsStack.pop()
+                    result += " " + opsStack.pop() + " "
                 }
                 //Выталкиваем открывающуюся скобку
                 opsStack.pop()
@@ -41,17 +43,19 @@ class ReversePolishNotationConverter() {
             }
             result += " "
             while (opsStack.isNotEmpty() && priority(symbol) <= priority(opsStack.peek())) {
-                result += " " + opsStack.pop()
+                result += " " + opsStack.pop() + " "
             }
             opsStack.push(symbol)
         }
         while (opsStack.isNotEmpty()) {
-            result += " " + opsStack.pop()
+            result += " " + opsStack.pop() + " "
         }
-        return result.trimIndent()
+        return replaceUnneccessarySpace(result)
     }
 
-    private fun priority(op: Char): Byte = operations.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation!")
+    private fun replaceUnneccessarySpace(result: String) = result.replace("   ", " ").replace("  ", " ").trim()
+
+    private fun priority(op: Char): Byte = operations.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation '$op'")
 
 
     fun addOperation(op: Operation) {

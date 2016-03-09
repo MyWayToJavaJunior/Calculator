@@ -24,4 +24,8 @@ class ReversePolishConverterTest {
     fun sum_10and100() {
         assertEquals("10 100 +", rpnc.toReversePolishNotation("10+100"))
     }
+    @Test
+    fun bracketsAndDivide(){
+        assertEquals("8 2 5 * + 1 3 2 * + 4 - /", rpnc.toReversePolishNotation("(8+2*5)/(1+3*2-4)"))
+    }
 }
