@@ -53,7 +53,7 @@ class ReversePolishNotationConverter() {
         return replaceUnneccessarySpace(result)
     }
 
-    private fun replaceUnneccessarySpace(result: String) = result.replace("   ", " ").replace("  ", " ").trim()
+    private fun replaceUnneccessarySpace(result: String) = result.replace("  ", " ").trim()
 
     private fun priority(op: Char): Byte = specSymbols.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation '$op'")
 
