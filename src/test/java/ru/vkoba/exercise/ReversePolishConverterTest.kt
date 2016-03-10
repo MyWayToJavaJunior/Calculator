@@ -26,6 +26,6 @@ class ReversePolishConverterTest {
     }
     @Test
     fun bracketsAndDivide(){
-        assertEquals("8 2 5 * + 1 3 2 * + 4 - /", rpnc.toReversePolishNotation("(8+2*5)/(1+3*2-4)"))
+        assertEquals("80 2 500 * + 1 3 2 * + 4 - /", rpnc.toReversePolishNotation("(80+2*500)/(1+3*2-4)"))
     }
 }
