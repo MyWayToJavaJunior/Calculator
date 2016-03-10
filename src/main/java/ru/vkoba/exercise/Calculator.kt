@@ -1,5 +1,6 @@
 package ru.vkoba.exercise
 
+import javafx.util.converter.DoubleStringConverter
 import java.util.*
 
 /**
@@ -7,7 +8,36 @@ import java.util.*
 
  */
 class Calculator {
+    fun calculate(expr: String): Double {
+        val argsStack = Stack<Double>()
+        val splittedRpnExpr = ReversePolishNotationConverter().toReversePolishNotation(expr).split(" ")
+        for (lexem in splittedRpnExpr) {
+            if (lexem.isNumeric()) {
+                argsStack.push(lexem.toDouble())
+            } else {
+                val arg1 = argsStack.pop()
+                val arg2 = argsStack.pop()
+                val temp = when (lexem) {
+                    "+" -> arg2 + arg1
+                    "-" -> arg2 - arg1
+                    "*" -> arg2 * arg1
+                    "/" -> arg2 / arg1
+                    else -> throw RuntimeException("Invalid operation!")
+                }
+                argsStack.push(temp)
+            }
+        }
+        return argsStack.pop()
+    }
+}
 
+fun String.isNumeric(): Boolean {
+    try {
+        this.toDouble()
+    } catch(nfe: NumberFormatException) {
+        return false;
+    }
+    return true;
 }
 
 
@@ -53,14 +83,10 @@ class ReversePolishNotationConverter() {
         return replaceUnneccessarySpace(result)
     }
 
-    private fun replaceUnneccessarySpace(result: String) = result.replace("  ", " ").trim()
+    private fun replaceUnneccessarySpace(result: String) = result
+            .replace("  ", " ").trim()
 
     private fun priority(op: Char): Byte = specSymbols.findLast { it -> it.symbol == op }?.priopity ?: throw RuntimeException("Unknown operation '$op'")
-
-
-    fun addOperation(op: Operation) {
-        specSymbols.add(op)
-    }
 
     private fun isOperation(symbol: Char): Boolean = specSymbols.filter { it -> it.symbol == symbol }.isNotEmpty()
 }
